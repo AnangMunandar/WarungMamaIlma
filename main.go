@@ -1,3 +1,4 @@
+
 package main
 
 import (
@@ -9,7 +10,7 @@ import (
 )
 
 type Product struct {
-	ID       int    `json:"id"`
+	ID       int64  `json:"id"`
 	Name     string `json:"name"`
 	Category string `json:"category"`
 	Price    int    `json:"price"`
@@ -17,8 +18,8 @@ type Product struct {
 }
 
 type OrderItemRequest struct {
-	ProductID int `json:"product_id"`
-	Quantity  int `json:"quantity"`
+	ProductID int64 `json:"product_id"`
+	Quantity  int   `json:"quantity"`
 }
 
 type OrderRequest struct {
@@ -28,7 +29,7 @@ type OrderRequest struct {
 }
 
 type OrderResponse struct {
-	OrderID int    `json:"order_id"`
+	OrderID int64  `json:"order_id"`
 	Total   int    `json:"total"`
 	Status  string `json:"status"`
 }
@@ -38,6 +39,7 @@ func main() {
 	defer db.Close()
 
 	http.HandleFunc("/", homeHandler)
+
 	http.Handle("/static/", http.StripPrefix(
 		"/static/",
 		http.FileServer(http.Dir("./static")),
@@ -77,7 +79,7 @@ func productsHandler(w http.ResponseWriter, r *http.Request) {
 	rows, err := db.Query(`
 		SELECT id, name, category, price, emoji
 		FROM products
-		WHERE active = 1
+		WHERE active = TRUE
 		ORDER BY id ASC
 	`)
 	if err != nil {
@@ -136,27 +138,27 @@ func ordersHandler(w http.ResponseWriter, r *http.Request) {
 	request.CustomerName = strings.TrimSpace(request.CustomerName)
 	request.Address = strings.TrimSpace(request.Address)
 
-	// Nama wajib diisi, alamat tidak lagi diwajibkan.
-if request.CustomerName == "" {
-    http.Error(w, "Nama pelanggan wajib diisi", http.StatusBadRequest)
-    return
-}
+	// Nama wajib diisi, alamat tidak diwajibkan.
+	if request.CustomerName == "" {
+		http.Error(w, "Nama pelanggan wajib diisi", http.StatusBadRequest)
+		return
+	}
 
-if len(request.CustomerName) > 100 {
-    http.Error(w, "Nama pelanggan terlalu panjang", http.StatusBadRequest)
-    return
-}
+	if len(request.CustomerName) > 100 {
+		http.Error(w, "Nama pelanggan terlalu panjang", http.StatusBadRequest)
+		return
+	}
 
 	if len(request.Items) == 0 || len(request.Items) > 50 {
 		http.Error(w, "Jumlah jenis produk tidak valid", http.StatusBadRequest)
 		return
 	}
 
-	seen := make(map[int]bool)
+	seen := make(map[int64]bool)
 	total := 0
 
 	type SavedItem struct {
-		ProductID   int
+		ProductID   int64
 		ProductName string
 		Price       int
 		Quantity    int
@@ -183,7 +185,7 @@ if len(request.CustomerName) > 100 {
 		err := db.QueryRow(`
 			SELECT name, price
 			FROM products
-			WHERE id = ? AND active = 1
+			WHERE id = $1 AND active = TRUE
 		`, item.ProductID).Scan(&productName, &price)
 
 		if err != nil {
@@ -215,26 +217,24 @@ if len(request.CustomerName) > 100 {
 	}
 	defer tx.Rollback()
 
-	result, err := tx.Exec(`
+	// PostgreSQL menggunakan RETURNING untuk mengambil ID baru.
+	var orderID int64
+
+	err = tx.QueryRow(`
 		INSERT INTO orders (customer_name, address, total, status)
-		VALUES (?, ?, ?, 'Menunggu')
-	`, request.CustomerName, request.Address, total)
+		VALUES ($1, $2, $3, 'Menunggu')
+		RETURNING id
+	`, request.CustomerName, request.Address, total).Scan(&orderID)
 
 	if err != nil {
 		http.Error(w, "Gagal menyimpan pesanan", http.StatusInternalServerError)
 		return
 	}
 
-	orderID, err := result.LastInsertId()
-	if err != nil {
-		http.Error(w, "Gagal mendapatkan nomor pesanan", http.StatusInternalServerError)
-		return
-	}
-
 	statement, err := tx.Prepare(`
 		INSERT INTO order_items
 		(order_id, product_id, product_name, price, quantity, subtotal)
-		VALUES (?, ?, ?, ?, ?, ?)
+		VALUES ($1, $2, $3, $4, $5, $6)
 	`)
 	if err != nil {
 		http.Error(w, "Gagal menyiapkan detail pesanan", http.StatusInternalServerError)
@@ -267,7 +267,7 @@ if len(request.CustomerName) > 100 {
 	w.WriteHeader(http.StatusCreated)
 
 	json.NewEncoder(w).Encode(OrderResponse{
-		OrderID: int(orderID),
+		OrderID: orderID,
 		Total:   total,
 		Status:  "Menunggu",
 	})

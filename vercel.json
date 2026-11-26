@@ -1,0 +1,13 @@
+
+{
+  "rewrites": [
+    {
+      "source": "/api/products",
+      "destination": "/api/index?route=products"
+    },
+    {
+      "source": "/api/orders",
+      "destination": "/api/index?route=orders"
+    }
+  ]
+}
