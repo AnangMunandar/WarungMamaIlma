@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#fff8f0">
+
+    <title>Warung Mama Ilma - Jajanan Enak</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <!-- =====================================
+         OPENING SCREEN
+    ====================================== -->
+
+    <div id="opening-screen">
+        <div class="opening-content">
+
+            <!-- Logo foto makanan -->
+            <div class="opening-logo">
+                <img
+                    src="/static/images/10-roti-bakar.jpg"
+                    alt="Roti Bakar"
+                >
+            </div>
+
+            <span class="opening-label">
+                Welcome
+            </span>
+
+            <h1>Warung Mama Ilma</h1>
+
+            <p>
+                Cemilan Bakaran dan gorengan.
+                Yuk, nikmati jajanan favoritmu!
+            </p>
+
+            <!-- Foto makanan realistis -->
+            <div class="opening-food">
+
+                <img
+                    src="/static/images/01-kentang-goreng.jpg"
+                    alt="Kentang Goreng"
+                >
+
+                <img
+                    src="/static/images/06-sosis-bakar.jpg"
+                    alt="Sosis Bakar"
+                >
+
+                <img
+                    src="/static/images/11-seblak.jpg"
+                    alt="Seblak"
+                >
+
+            </div>
+
+            <button type="button" id="enter-button">
+                Masuk ke Warung <span>→</span>
+            </button>
+
+            <small>
+                Enak, Hangat, dan Bersahabat 
+            </small>
+
+        </div>
+    </div>
+
+    <!-- END OPENING SCREEN -->
+
+
+    <!-- =====================================
+         NAVBAR
+    ====================================== -->
+
+    <header class="navbar">
+
+        <a href="#" class="brand">
+            <span class="brand-icon">🍟</span>
+            <span>Warung <b>Mama Ilma</b></span>
+        </a>
+
+        <button type="button" class="cart-button" onclick="toggleCart()">
+            🛒 <span id="cart-count">0</span>
+        </button>
+
+    </header>
+
+
+    <main>
+
+        <!-- =====================================
+             HERO
+        ====================================== -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="hero-label">
+                </span>
+
+                <h1>Warung Mama Ilma!</h1>
+
+                <p>
+                    Cemilan Bakaran dan Gorengan
+                </p>
+
+                <a href="#menu" class="hero-button">
+                    Lihat Menu <span>→</span>
+                </a>
+
+            </div>
+
+            <div class="hero-food-gallery">
+
+                <img
+                    src="/static/images/01-kentang-goreng.jpg"
+                    alt="Kentang Goreng"
+                >
+
+                <img
+                    src="/static/images/06-sosis-bakar.jpg"
+                    alt="Sosis Bakar"
+                >
+
+                <img
+                    src="/static/images/11-seblak.jpg"
+                    alt="Seblak"
+                >
+
+            </div>
+
+            <div class="hero-circle"></div>
+
+        </section>
+
+
+        <!-- =====================================
+             BENEFITS
+        ====================================== -->
+
+        <section class="benefits">
+
+            <div>
+                ✨ <span>Fresh & Enak</span>
+            </div>
+
+            <div>
+                💰 <span>Harga Bersahabat</span>
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             MENU
+        ====================================== -->
+
+        <section class="menu-section" id="menu">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-label">
+                        PILIH FAVORITMU
+                    </span>
+
+                    <h2>Menu🍴</h2>
+                </div>
+
+                <span class="menu-total">
+                    11 Menu
+                </span>
+
+            </div>
+
+
+            <div class="categories">
+
+                <button
+                    type="button"
+                    class="category active"
+                    onclick="filterMenu('Semua', this)"
+                >
+                    🍽️ Semua
+                </button>
+
+                <button
+                    type="button"
+                    class="category"
+                    onclick="filterMenu('Gorengan', this)"
+                >
+                    🍟 Gorengan
+                </button>
+
+                <button
+                    type="button"
+                    class="category"
+                    onclick="filterMenu('Bakaran', this)"
+                >
+                    🍢 Bakaran
+                </button>
+
+                <button
+                    type="button"
+                    class="category"
+                    onclick="filterMenu('Spesial', this)"
+                >
+                    🥘 Seblak
+                </button>
+
+            </div>
+
+
+            <div class="menu-grid" id="menu-list"></div>
+
+        </section>
+
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
+
+    <footer>
+
+        <div class="footer-logo">
+            🍟 Warung Mama Ilma
+        </div>
+
+        <p>
+            Enak, Hangat, dan Bikin Nagih!
+        </p>
+
+        <small>
+            © 2026 Warung Mama Ilma. All Rights Reserved.
+        </small>
+
+    </footer>
+
+
+    <!-- =====================================
+         CART OVERLAY
+    ====================================== -->
+
+    <div
+        class="cart-overlay"
+        id="cart-overlay"
+        onclick="toggleCart()"
+    ></div>
+
+
+    <!-- =====================================
+         CART PANEL
+    ====================================== -->
+
+    
+<aside class="cart-panel" id="cart-panel">
+
+    <div class="cart-header">
+    <div class="cart-heading">
+    <div>
+        <span class="cart-eyebrow"></span>
+        <h2>Pesanan Saya</h2>
+    </div>
+</div>
+
+        <button
+            type="button"
+            onclick="toggleCart()"
+            class="close-button"
+            aria-label="Tutup keranjang"
+        >
+            ✕
+        </button>
+    </div>
+
+    <div id="cart-items" class="cart-items">
+        <div class="empty-cart">
+            <div class="empty-cart-icon">🛍️</div>
+            <h3>Keranjang Masih Kosong</h3>
+            <p>Yuk, pilih jajanan favoritmu dan tambahkan ke keranjang!</p>
+        </div>
+    </div>
+
+    <div class="cart-footer">
+
+        <div class="total-row">
+            <div>
+                <span class="total-label">Total Pembayaran</span>
+            </div>
+
+            <strong id="cart-total">Rp0</strong>
+        </div>
+
+        <button
+            type="button"
+            class="checkout-button"
+            onclick="checkout()"
+        >
+            Pesan Sekarang <span>→</span>
+        </button>
+
+        <button
+            type="button"
+            class="cancel-order-button"
+            onclick="cancelOrder()"
+        >
+            Batalkan Pesanan
+        </button>
+
+    </div>
+
+</aside>
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+<script src="/static/js/app.js"></script>
+
+<script>
+/* =====================================
+   PARALLAX OPENING SCREEN
+   WARUNG MAMA ILMA
+===================================== */
+
+(() => {
+    const screen = document.getElementById("opening-screen");
+
+    if (!screen) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+
+    const layers = [
+        { selector: ".opening-logo", depth: 0.8 },
+        { selector: ".opening-label", depth: 0.25 },
+        { selector: ".opening-content h1", depth: 0.35 },
+        { selector: ".opening-content p", depth: 0.25 },
+        { selector: ".opening-food", depth: 0.5 },
+        { selector: "#enter-button", depth: 0.2 },
+        { selector: ".opening-content small", depth: 0.15 }
+    ];
+
+    const elements = layers
+        .map(layer => ({
+            element: screen.querySelector(layer.selector),
+            depth: layer.depth
+        }))
+        .filter(layer => layer.element);
+
+    const foodImages = screen.querySelectorAll(".opening-food img");
+
+    const resetParallax = () => {
+        elements.forEach(({ element }) => {
+            element.style.removeProperty("--parallax-x");
+            element.style.removeProperty("--parallax-y");
+        });
+
+        foodImages.forEach(img => {
+            img.style.translate = "";
+        });
+    };
+
+    screen.addEventListener("pointermove", event => {
+        const rect = screen.getBoundingClientRect();
+
+        if (!rect.width || !rect.height) return;
+
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+        const strength = event.pointerType === "touch" ? 8 : 12;
+
+        elements.forEach(({ element, depth }) => {
+            const moveY = y * strength * depth * 0.15;
+            element.style.setProperty(
+                "--parallax-x",
+                `${moveX.toFixed(2)}px`
+            );
+
+            element.style.setProperty(
+                "--parallax-y",
+                `${moveY.toFixed(2)}px`
+            );
+        });
+
+        foodImages.forEach((img, index) => {
+            const depth = [1, -0.8, 0.6][index % 3];
+
+        const moveY = y * strength * depth * 0.15;
+
+            img.style.translate =
+                `${moveX.toFixed(2)}px ${moveY.toFixed(2)}px`;
+        });
+    });
+
+    screen.addEventListener("pointerleave", resetParallax);
+    screen.addEventListener("pointercancel", resetParallax);
+})();
+</script>
+
+</body>
+</html>
+

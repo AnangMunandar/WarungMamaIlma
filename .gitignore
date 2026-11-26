@@ -1,0 +1,11 @@
+﻿# Database SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# File lokal
+.env
+.env.*
+
+# File sementara
+*.log
