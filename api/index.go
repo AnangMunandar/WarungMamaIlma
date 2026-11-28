@@ -12,7 +12,8 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/stdlib"
 )
 
 var (
@@ -54,10 +55,16 @@ func database() (*sql.DB, error) {
 			return
 		}
 
-		db, dbErr = sql.Open("pgx", databaseURL)
-		if dbErr != nil {
+		// Gunakan Simple Protocol untuk Supabase Transaction Pooler.
+		config, err := pgx.ParseConfig(databaseURL)
+		if err != nil {
+			dbErr = err
 			return
 		}
+
+		config.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+
+		db = stdlib.OpenDB(*config)
 
 		db.SetMaxOpenConns(5)
 		db.SetMaxIdleConns(2)
@@ -71,11 +78,12 @@ func database() (*sql.DB, error) {
 			db = nil
 			return
 		}
+
+		log.Println("Koneksi Supabase berhasil menggunakan Simple Protocol")
 	})
 
 	return db, dbErr
 }
-
 func Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusNoContent)
