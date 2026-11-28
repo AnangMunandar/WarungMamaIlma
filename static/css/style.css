@@ -2795,74 +2795,40 @@ a:focus {
         animation: none;
     }
 }
-/* Mencegah zoom saat double tap di Android */
+
+/* =====================================
+   PENGATURAN SENTUHAN ANDROID & iOS
+   Mencegah double-tap zoom tanpa mematikan pinch zoom
+===================================== */
+
 html,
 body {
-    touch-action: pan-x pan-y;
     -webkit-text-size-adjust: 100%;
 }
 
-/* Menghilangkan menu seleksi teks saat ditekan lama */
-* {
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-/* Tetap mengizinkan pengisian dan penyalinan pada kolom input */
-input,
-textarea {
-    -webkit-user-select: text;
-    user-select: text;
-    -webkit-touch-callout: default;
-}
-/* Mencegah zoom akibat ketuk dua kali */
+/* Izinkan scroll horizontal, vertikal, dan zoom dua jari */
 html,
-body,
-* {
-    touch-action: manipulation;
-}
-
-/* Mencegah seleksi teks dan menu salin saat ditekan lama */
-* {
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Input tetap bisa digunakan dan teksnya bisa diseleksi */
-input,
-textarea {
-    -webkit-user-select: text !important;
-    user-select: text !important;
-    -webkit-touch-callout: default !important;
-    touch-action: auto;
-}
-/* Pengaturan khusus iPhone dan iPad */
-html,
-body {
-    touch-action: manipulation;
-    -webkit-text-size-adjust: 100%;
-    overscroll-behavior: none;
-}
-
-/* Mencegah seleksi teks dan menu salin */
 body,
 body * {
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-tap-highlight-color: transparent !important;
+    touch-action: pan-x pan-y pinch-zoom;
 }
 
-/* Input tetap bisa digunakan */
+/* Pengaturan seleksi teks */
+body,
+body * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Input tetap bisa diketik dan teksnya diseleksi */
 input,
 textarea {
     -webkit-user-select: text !important;
     user-select: text !important;
-    -webkit-touch-callout: default !important;
+    -webkit-touch-callout: default;
+    touch-action: pan-x pan-y pinch-zoom;
 }
 
 /* Navbar Pesanan Saya lebih kecil dan sejajar */
@@ -3201,6 +3167,7 @@ textarea {
         box-sizing: border-box !important;
     }
 }
+
 /* =====================================
    FIX PULL TO REFRESH MOBILE
 ===================================== */
@@ -3211,20 +3178,8 @@ body {
     overscroll-behavior-x: none !important;
 }
 
-body {
-    touch-action: pan-y pan-x !important;
-}
-
-#opening-screen {
-    overscroll-behavior-y: auto !important;
-    touch-action: pan-y pan-x !important;
-}
-
+/* Opening screen tetap mendukung semua gerakan sentuhan */
+#opening-screen,
 #opening-screen .opening-content {
-    touch-action: pan-y pan-x !important;
-}
-/* Pengaturan sentuhan untuk Android dan iOS */
-html,
-body {
-    touch-action: manipulation;
+    touch-action: pan-x pan-y pinch-zoom;
 }
