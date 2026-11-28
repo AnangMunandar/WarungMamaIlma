@@ -3223,3 +3223,8 @@ body {
 #opening-screen .opening-content {
     touch-action: pan-y pan-x !important;
 }
+/* Pengaturan sentuhan untuk Android dan iOS */
+html,
+body {
+    touch-action: manipulation;
+}
